@@ -15,6 +15,7 @@ const Library = async () => {
           genres={track.genres}
           title={track.title}
           audioFile={track.audioFile}
+          slug={track.slug}
         />
       ))}
     </main>
