@@ -6,9 +6,15 @@ import { FormEvent, useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { IoAddOutline, IoCloseOutline } from "react-icons/io5";
 import { ModalContext } from "../provider/modal-provider";
+import { CreateTrackBody } from "@/api/requestBodies/createTrackBody";
+import { createTrack } from "@/api/tracks";
+import { COVER_IMAGE_REGEX } from "@/constants";
+import { useRouter } from "next/navigation";
+import { FaSpinner } from "react-icons/fa";
 
 const CreateTrack = () => {
   const { setModal } = useContext(ModalContext);
+  const router = useRouter();
 
   const [title, setTitle] = useState<string>("");
   const [artist, setArtist] = useState<string>("");
@@ -16,10 +22,73 @@ const CreateTrack = () => {
   const [genre, setGenre] = useState<string>("");
   const [genres, setGenres] = useState<string[]>([]);
   const [coverImage, setCoverImage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onCreateTrackSubmit = (e: FormEvent) => {
+  const createTrackHandler = async (body: CreateTrackBody) => {
+    try {
+      await createTrack(body);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onCreateTrackSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    toast.success(`Create Track!`);
+
+    if (!title || !artist || !genres.length || !album) {
+      toast.error("Please fill in all required fields!");
+      return;
+    }
+
+    if (title.length > 200) {
+      toast.error("Title cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (title.length < 3) {
+      toast.error("Title cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (artist.length > 200) {
+      toast.error("Artist name cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (artist.length < 3) {
+      toast.error("Artist name cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (album.length > 200) {
+      toast.error("Album name cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (album.length < 3) {
+      toast.error("Album name cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (coverImage && !COVER_IMAGE_REGEX.test(coverImage)) {
+      toast.error("Invalid cover image URL!");
+      return;
+    }
+
+    const body = {
+      title,
+      artist,
+      album,
+      genres,
+      coverImage,
+    };
+
+    setIsLoading(true);
+    await createTrackHandler(body);
+    setIsLoading(false);
+    setModal(null);
+    router.refresh();
+    toast.success(`Track "${title}" created successfully!`);
   };
 
   return (
@@ -65,7 +134,7 @@ const CreateTrack = () => {
             />
           </div>
           <div>
-            <label htmlFor="album">Album (Optional)</label>
+            <label htmlFor="album">Album</label>
             <Input
               value={album}
               onChange={(e) => setAlbum(e.target.value)}
@@ -133,7 +202,8 @@ const CreateTrack = () => {
             type="submit"
             className="mx-auto px-16 mt-8"
           >
-            Create Track
+            {isLoading ? <FaSpinner className="animate-spin" /> : null}
+            {isLoading ? "Creating..." : "Create Track"}
           </Button>
         </form>
       </div>

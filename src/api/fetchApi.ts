@@ -10,7 +10,7 @@ export const fetchApi = async <T>({
   body,
 }: FetchOptions): Promise<T> => {
   const headers: Record<string, string> = {
-    accept: "text/plain",
+    "content-type": "application/json",
   };
 
   const isFormData = body instanceof FormData;

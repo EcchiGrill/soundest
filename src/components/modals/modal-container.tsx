@@ -14,6 +14,10 @@ const ModalContainer = () => {
         return <CreateTrack />;
       case "EditTrack":
         return <EditTrack />;
+      case "UploadTrack":
+        return <div>Upload Track</div>;
+      case "DeleteTrack":
+        return <div>Upload Track</div>;
       default:
         return null;
     }

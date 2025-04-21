@@ -6,26 +6,96 @@ import { FormEvent, useContext, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { IoAddOutline, IoCloseOutline } from "react-icons/io5";
 import { ModalContext } from "../provider/modal-provider";
-import { getTrackBySlug } from "@/api/tracks";
+import { editTrackById, getTrackBySlug } from "@/api/tracks";
+import { COVER_IMAGE_REGEX } from "@/constants";
+import { EditTrackBody } from "@/api/requestBodies/editTrackBody.interface";
+import { FaSpinner } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const EditTrack = () => {
   const { activeSlug, setModal, setActiveSlug } = useContext(ModalContext);
+  const router = useRouter();
 
+  const [id, setId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [artist, setArtist] = useState<string>("");
   const [album, setAlbum] = useState<string>("");
   const [genre, setGenre] = useState<string>("");
   const [genres, setGenres] = useState<string[]>([]);
   const [coverImage, setCoverImage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const onEditTrackSubmit = (e: FormEvent) => {
+  const editTrackHandler = async (body: EditTrackBody) => {
+    try {
+      await editTrackById(id, body);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onEditTrackSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    toast.success(`Edit Track!`);
+
+    if (!title || !artist || !genres.length || !album) {
+      toast.error("Please fill in all required fields!");
+      return;
+    }
+
+    if (title.length > 200) {
+      toast.error("Title cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (title.length < 3) {
+      toast.error("Title cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (artist.length > 200) {
+      toast.error("Artist name cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (artist.length < 3) {
+      toast.error("Artist name cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (album.length > 200) {
+      toast.error("Album name cannot be more than 200 symbols!");
+      return;
+    }
+
+    if (album.length < 3) {
+      toast.error("Album name cannot be less than 3 symbols!");
+      return;
+    }
+
+    if (coverImage && !COVER_IMAGE_REGEX.test(coverImage)) {
+      toast.error("Invalid cover image URL!");
+      return;
+    }
+
+    const body = {
+      title,
+      artist,
+      album,
+      genres,
+      coverImage,
+    };
+
+    setIsLoading(true);
+    await editTrackHandler(body);
+    setIsLoading(false);
+    setModal(null);
+    router.refresh();
+    toast.success(`Track "${title}" edited successfully!`);
   };
 
   const getTrack = async () => {
     const track = await getTrackBySlug(activeSlug as string);
 
+    setId(track.id);
     setTitle(track.title);
     setArtist(track.artist);
     setAlbum(track.album);
@@ -78,7 +148,7 @@ const EditTrack = () => {
             />
           </div>
           <div>
-            <label htmlFor="album">Album (Optional)</label>
+            <label htmlFor="album">Album</label>
             <Input
               value={album}
               onChange={(e) => setAlbum(e.target.value)}
@@ -145,8 +215,10 @@ const EditTrack = () => {
             color="purpleBackground"
             type="submit"
             className="mx-auto px-16 mt-8"
+            disabled={isLoading}
           >
-            Edit Track
+            {isLoading ? <FaSpinner className="animate-spin" /> : null}
+            {isLoading ? "Editing..." : "Edit Track"}
           </Button>
         </form>
       </div>

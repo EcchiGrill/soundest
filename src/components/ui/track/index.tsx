@@ -15,7 +15,7 @@ const Track = ({
   slug,
 }: TrackProps) => {
   return (
-    <div className="max-w-lg p-5 flex flex-col gap-4 bg-background border border-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 text-primary">
+    <div className="max-w-lg p-5 flex flex-col gap-4 bg-background border border-secondary/30 rounded-lg shadow-md hover:shadow-lg transition duration-200 text-primary">
       <div className="relative group h-72 w-full rounded-lg overflow-hidden">
         <Image
           src={coverImage || "/cover-default.jpg"}
