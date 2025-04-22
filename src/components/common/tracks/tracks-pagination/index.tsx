@@ -18,10 +18,11 @@ const TracksPagination = ({
   const searchParams = useSearchParams();
 
   return (
-    <Pagination>
+    <Pagination data-testid="pagination">
       <PaginationContent className="text-primary">
         <PaginationItem>
           <PaginationPrevious
+            data-testid="pagination-prev"
             href={
               pageNumber !== 1
                 ? `/page/${pageNumber - 1}?` + searchParams.toString()
@@ -48,6 +49,7 @@ const TracksPagination = ({
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
+            data-testid="pagination-next"
             href={
               pageNumber !== totalPages
                 ? `/page/${pageNumber + 1}?` + searchParams.toString()

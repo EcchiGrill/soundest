@@ -45,26 +45,30 @@ const FilterPanel = () => {
     sort: searchParams.get("sort") ?? undefined,
   });
 
-  const filtersArr = [
+  const filterItems = [
     {
       type: "sort",
       value: filters.sort,
       options: sortOptions,
+      test: "sort-select",
     },
     {
       type: "order",
       value: filters.order,
       options: orderOptions,
+      test: "order-select",
     },
     {
       type: "genre",
       value: filters.genre,
       options: genres,
+      test: "filter-genre",
     },
     {
       type: "artist",
       value: filters.artist,
       options: artists,
+      test: "filter-artist",
     },
   ];
 
@@ -143,10 +147,11 @@ const FilterPanel = () => {
   }, []);
 
   return (
-    <div className="flex justify-between items-center mt-8">
+    <div className="flex max-lg:flex-col gap-8 lg:justify-between items-center mt-8">
       <div className="flex gap-4 items-center">
         <div className="relative">
           <Input
+            data-testid="search-input"
             value={search}
             placeholder="Search tracks..."
             className="pl-9 text-primary"
@@ -156,14 +161,19 @@ const FilterPanel = () => {
         </div>
 
         {isSearching && (
-          <FaSpinner className="text-primary animate-spin h-6 w-6" />
+          <FaSpinner
+            className="text-primary animate-spin h-6 w-6"
+            data-testid="loading-tracks"
+            data-loading="true"
+          />
         )}
       </div>
 
-      <div className="flex gap-4">
-        {filtersArr.map((filter, i) => (
+      <div className="flex max-sm:flex-col gap-4">
+        {filterItems.map((filter, i) => (
           <Suspense key={i}>
             <Filter
+              test={filter.test}
               options={filter.options}
               setFilters={setFilters}
               type={filter.type as FilterType}

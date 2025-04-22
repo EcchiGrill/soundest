@@ -1,6 +1,17 @@
+import { getTracks } from "@/api/tracks";
 import Tracks from "@/components/common/tracks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
+
+export async function generateStaticParams() {
+  const {
+    meta: { totalPages },
+  } = await getTracks();
+
+  return Array.from({ length: totalPages }).map((_, i) => {
+    return { pageNumber: String(i + 1) };
+  });
+}
 
 interface PageProps {
   params: Promise<{ pageNumber: string }>;

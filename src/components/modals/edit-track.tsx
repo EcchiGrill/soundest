@@ -112,7 +112,7 @@ const EditTrack = () => {
 
   return (
     <>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3 border border-secondary/30 ">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[22rem] xs:w-[28rem] z-20 rounded-lg gap-3 border border-secondary/30 ">
         <Button
           className="absolute top-4 right-4 cursor-pointer h-8 w-8 p-0"
           onClick={() => {
@@ -128,12 +128,14 @@ const EditTrack = () => {
         <div className="text-2xl self-start font-bold mt-2">Edit Track</div>
         <p className="text-secondary">Modify the details of {`"${title}"`}</p>
         <form
+          data-testid="track-form"
           className="w-full flex flex-col gap-5 mt-4"
           onSubmit={onEditTrackSubmit}
         >
           <div>
             <label htmlFor="name">Title</label>
             <Input
+              data-testid="input-title"
               id="name"
               className="mt-2"
               value={title}
@@ -144,6 +146,7 @@ const EditTrack = () => {
           <div>
             <label htmlFor="artist">Artist</label>
             <Input
+              data-testid="input-artist"
               onChange={(e) => setArtist(e.target.value)}
               value={artist}
               id="artist"
@@ -154,6 +157,7 @@ const EditTrack = () => {
           <div>
             <label htmlFor="album">Album</label>
             <Input
+              data-testid="input-album"
               value={album}
               onChange={(e) => setAlbum(e.target.value)}
               placeholder="Enter album name..."
@@ -165,6 +169,7 @@ const EditTrack = () => {
             <label htmlFor="genres">Genres</label>
             <div className="flex gap-2 place-items-center mt-2 mb-3">
               <Input
+                data-testid="genre-selector"
                 value={genre}
                 id="genres"
                 placeholder="Add a genre..."
@@ -207,6 +212,7 @@ const EditTrack = () => {
           <div>
             <label htmlFor="coverImage">Cover Image URL (Optional)</label>
             <Input
+              data-testid="input-cover-image"
               value={coverImage}
               onChange={(e) => setCoverImage(e.target.value)}
               placeholder="https://example.com/image.jpg"
@@ -216,12 +222,20 @@ const EditTrack = () => {
           </div>
 
           <Button
+            data-testid="submit-button"
             color="purpleBackground"
             type="submit"
             className="mx-auto px-16 mt-8"
             disabled={isLoading}
+            aria-disabled={isLoading}
           >
-            {isLoading ? <FaSpinner className="animate-spin" /> : null}
+            {isLoading ? (
+              <FaSpinner
+                className="animate-spin"
+                data-testid="loading-indicator"
+                data-loading="true"
+              />
+            ) : null}
             {isLoading ? "Editing..." : "Edit Track"}
           </Button>
         </form>

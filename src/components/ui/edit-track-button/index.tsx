@@ -50,6 +50,7 @@ const EditTrackButton = ({ slug, id }: IEditTrackButtonProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="text-primary bg-background border border-secondary/20">
           <DropdownMenuItem
+            data-testid={`edit-track-${id}`}
             onClick={() => {
               setActiveSlug(slug);
               setActiveId(id);
@@ -62,7 +63,10 @@ const EditTrackButton = ({ slug, id }: IEditTrackButtonProps) => {
           >
             <MdOutlineModeEditOutline /> Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
+          <DropdownMenuItem
+            onClick={() => fileInputRef.current?.click()}
+            data-testid={`upload-track-${id}`}
+          >
             <MdUpload /> Upload Audio
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -76,6 +80,7 @@ const EditTrackButton = ({ slug, id }: IEditTrackButtonProps) => {
             <FaRegFileAudio /> Delete Audio
           </DropdownMenuItem>
           <DropdownMenuItem
+            data-testid={`delete-track-${id}`}
             className="text-red-600"
             onClick={() => {
               setActiveSlug(slug);

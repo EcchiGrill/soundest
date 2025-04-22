@@ -13,10 +13,12 @@ const Tracks = async ({ searchParams, pageNumber = "1" }: ITracksProps) => {
     new URLSearchParams(searchParams).toString() + `&page=${pageNumber}`
   );
 
-  return (
+  console.log(data);
+
+  return data.length ? (
     <>
-      <div className="grid grid-cols-4 gap-8 mt-10 mb-14">
-        {data?.map((track, i) => (
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8 mt-10 mb-14">
+        {data.map((track, i) => (
           <Track
             key={i}
             id={track.id}
@@ -37,6 +39,10 @@ const Tracks = async ({ searchParams, pageNumber = "1" }: ITracksProps) => {
         />
       </Suspense>
     </>
+  ) : (
+    <h1 className="text-2xl text-red-600 text-center mt-44">
+      Nothing was found!
+    </h1>
   );
 };
 

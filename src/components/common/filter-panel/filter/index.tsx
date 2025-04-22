@@ -11,7 +11,7 @@ import { IFilterProps } from "./filter.props";
 import { createQueryString } from "@/helpers/createQueryString";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Filter = ({ type, value, options, setFilters }: IFilterProps) => {
+const Filter = ({ type, value, options, setFilters, test }: IFilterProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -30,7 +30,7 @@ const Filter = ({ type, value, options, setFilters }: IFilterProps) => {
   };
 
   return (
-    <DropdownMenu>
+    <DropdownMenu data-testid={test}>
       <DropdownMenuTrigger asChild>
         <Button variant={"secondary"} className="capitalize">
           {type} <IoChevronDownSharp className="mt-0.5" />

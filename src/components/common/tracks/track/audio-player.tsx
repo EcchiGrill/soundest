@@ -6,6 +6,7 @@ import { BsVolumeUp, BsVolumeMute } from "react-icons/bs";
 import { IAudioPlayerProps } from "./audio-player/audio-player.props";
 
 const AudioPlayer = ({
+  activeId,
   audioFile,
   isPlaying,
   onPlayPause,
@@ -66,13 +67,17 @@ const AudioPlayer = ({
   }, [isPlaying]);
 
   return (
-    <div className="w-full bg-secondary/10 p-4 rounded-lg mt-4 ">
+    <div
+      className="w-full bg-secondary/10 p-4 rounded-lg mt-4"
+      data-testid={`audio-player-${activeId}`}
+    >
       <audio ref={audioRef} src={audioUrl} onTimeUpdate={handleTimeUpdate} />
 
       <div className="flex items-center gap-4">
         <button
           onClick={onPlayPause}
           className="p-2 rounded-full hover:bg-secondary/20"
+          data-testid={`play-button-${activeId}`}
         >
           {isPlaying ? (
             <BiPause className="w-6 h-6" />
@@ -105,6 +110,7 @@ const AudioPlayer = ({
             )}
           </button>
           <input
+            data-testid={`audio-progress-${activeId}`}
             type="range"
             min={0}
             max={1}

@@ -33,7 +33,10 @@ const DeleteAudio = () => {
 
   return (
     <>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3 border border-secondary/30 ">
+      <div
+        data-testid="confirm-dialog"
+        className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3 border border-secondary/30 "
+      >
         <Button
           className="absolute top-4 right-4 cursor-pointer h-8 w-8 p-0"
           onClick={() => {
@@ -56,16 +59,25 @@ const DeleteAudio = () => {
 
         <div className="flex gap-4 mt-4">
           <Button
+            data-testid="confirm-delete"
             variant="destructive"
             disabled={isLoading}
+            aria-disabled={isLoading}
             onClick={() => {
               deleteHandler();
             }}
           >
-            {isLoading ? <FaSpinner className="animate-spin" /> : null}
+            {isLoading ? (
+              <FaSpinner
+                className="animate-spin"
+                data-testid="loading-indicator"
+                data-loading="true"
+              />
+            ) : null}
             {isLoading ? "Deleting..." : "Delete"}
           </Button>
           <Button
+            data-testid="cancel-delete"
             variant="outline"
             disabled={isLoading}
             onClick={() => {

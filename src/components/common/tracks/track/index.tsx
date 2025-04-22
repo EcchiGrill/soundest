@@ -56,8 +56,13 @@ const Track = ({
       </div>
       <div className="flex justify-between items-center">
         <div>
-          <h2>{title}</h2>
-          <h3 className="text-secondary mt-1">{artist}</h3>
+          <h2 data-testid={`track-item-${id}-title`}>{title}</h2>
+          <h3
+            data-testid={`track-item-${id}-artist`}
+            className="text-secondary mt-1"
+          >
+            {artist}
+          </h3>
         </div>
         <EditTrackButton slug={slug} id={id} />
       </div>
@@ -78,6 +83,7 @@ const Track = ({
 
       {audioFile ? (
         <AudioPlayer
+          activeId={id}
           audioFile={audioFile}
           isPlaying={isPlaying}
           onPlayPause={handlePlayPause}

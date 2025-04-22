@@ -12,8 +12,27 @@ import FilterPanel from "@/components/common/filter-panel";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL as string),
   title: "Soundest",
   description: "Listen to your favorite bangers everywhere!",
+  creator: "Dmytro Oborskyi",
+  category: "Music",
+  keywords: ["soundest", "music", "sound library"],
+  robots: { index: true, follow: true, nocache: true },
+  openGraph: {
+    title: "Soundest",
+    description: "Listen to your favorite bangers everywhere!",
+    type: "website",
+    url: process.env.NEXT_PUBLIC_URL,
+    images: [
+      {
+        url: process.env.NEXT_PUBLIC_URL + "/icon.svg",
+        width: 1200,
+        height: 630,
+        alt: "Soundest",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -36,7 +55,7 @@ export default function RootLayout({
             {children}
           </main>
           <ModalContainer />
-          <ToastContainer />
+          <ToastContainer data-testid="toast-container" />
         </ModalProvider>
       </body>
     </html>
