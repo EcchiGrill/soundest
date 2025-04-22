@@ -9,11 +9,13 @@ export const fetchApi = async <T>({
   method,
   body,
 }: FetchOptions): Promise<T> => {
-  const headers: Record<string, string> = {
-    accept: "text/plain",
-  };
+  const headers: Record<string, string> = {};
 
   const isFormData = body instanceof FormData;
+
+  if (body && !isFormData) {
+    headers["content-type"] = "application/json";
+  }
 
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
@@ -28,5 +30,5 @@ export const fetchApi = async <T>({
     }
   );
 
-  return response.json();
+  return response.status !== 204 && response.json();
 };
