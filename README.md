@@ -33,8 +33,6 @@
 
 1️⃣ **Clone the repository and install dependencies:**
 
-1️⃣ Clone the repository and install dependencies:
-
 ```sh
 # Clone the repo
 git clone https://github.com/EcchiGrill/soundest.git
