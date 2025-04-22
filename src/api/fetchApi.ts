@@ -9,9 +9,11 @@ export const fetchApi = async <T>({
   method,
   body,
 }: FetchOptions): Promise<T> => {
-  const headers: Record<string, string> = {
-    "content-type": "application/json",
-  };
+  const headers: Record<string, string> = {};
+
+  if (body) {
+    headers["content-type"] = "application/json";
+  }
 
   const isFormData = body instanceof FormData;
 
@@ -28,5 +30,5 @@ export const fetchApi = async <T>({
     }
   );
 
-  return response.json();
+  return response.status !== 204 && response.json();
 };

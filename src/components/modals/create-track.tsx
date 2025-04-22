@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
 
 const CreateTrack = () => {
-  const { setModal } = useContext(ModalContext);
+  const { setModal, setActiveId, setActiveSlug } = useContext(ModalContext);
   const router = useRouter();
 
   const [title, setTitle] = useState<string>("");
@@ -25,11 +25,18 @@ const CreateTrack = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const createTrackHandler = async (body: CreateTrackBody) => {
+    setIsLoading(true);
     try {
       await createTrack(body);
+      setModal(null);
+      setActiveId(null);
+      setActiveSlug(null);
+      router.refresh();
+      toast.success(`Track "${title}" created successfully!`);
     } catch (error) {
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   const onCreateTrackSubmit = async (e: FormEvent) => {
@@ -83,21 +90,18 @@ const CreateTrack = () => {
       coverImage,
     };
 
-    setIsLoading(true);
     await createTrackHandler(body);
-    setIsLoading(false);
-    setModal(null);
-    router.refresh();
-    toast.success(`Track "${title}" created successfully!`);
   };
 
   return (
     <>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3 border border-secondary/30 ">
         <Button
           className="absolute top-4 right-4 cursor-pointer h-8 w-8 p-0"
           onClick={() => {
             setModal(null);
+            setActiveId(null);
+            setActiveSlug(null);
           }}
           variant="link"
         >
@@ -201,6 +205,7 @@ const CreateTrack = () => {
             color="purpleBackground"
             type="submit"
             className="mx-auto px-16 mt-8"
+            disabled={isLoading}
           >
             {isLoading ? <FaSpinner className="animate-spin" /> : null}
             {isLoading ? "Creating..." : "Create Track"}

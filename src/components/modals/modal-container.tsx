@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { ModalContext } from "../provider/modal-provider";
 import CreateTrack from "./create-track";
 import EditTrack from "./edit-track";
+import DeleteTrack from "./delete-track";
 
 const ModalContainer = () => {
   const { modal } = useContext(ModalContext);
@@ -14,10 +15,8 @@ const ModalContainer = () => {
         return <CreateTrack />;
       case "EditTrack":
         return <EditTrack />;
-      case "UploadTrack":
-        return <div>Upload Track</div>;
       case "DeleteTrack":
-        return <div>Upload Track</div>;
+        return <DeleteTrack />;
       default:
         return null;
     }

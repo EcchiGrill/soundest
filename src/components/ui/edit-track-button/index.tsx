@@ -1,19 +1,20 @@
 "use client";
 
 import { BsThreeDots } from "react-icons/bs";
-import { Button } from "./button";
+import { Button } from "../button";
 import { useContext } from "react";
-import { ModalContext } from "../provider/modal-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./dropdown-menu";
+} from "../dropdown-menu";
 import { MdOutlineModeEditOutline, MdDelete, MdUpload } from "react-icons/md";
+import { IEditTrackButtonProps } from "./edit-track-button.props.";
+import { ModalContext } from "@/components/provider/modal-provider";
 
-const EditTrackButton = ({ slug }: { slug: string }) => {
-  const { setModal, setActiveSlug } = useContext(ModalContext);
+const EditTrackButton = ({ slug, id }: IEditTrackButtonProps) => {
+  const { setModal, setActiveSlug, setActiveId } = useContext(ModalContext);
 
   return (
     <DropdownMenu>
@@ -25,22 +26,27 @@ const EditTrackButton = ({ slug }: { slug: string }) => {
       <DropdownMenuContent className="text-primary bg-background border border-secondary/20">
         <DropdownMenuItem
           onClick={() => {
-            setModal("EditTrack");
             setActiveSlug(slug);
+            setActiveId(id);
             window.scrollTo({
               top: 0,
               behavior: "smooth",
             });
+            setModal("EditTrack");
           }}
         >
           <MdOutlineModeEditOutline /> Edit
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setModal("UploadTrack")}>
+        <DropdownMenuItem>
           <MdUpload /> Upload Audio
         </DropdownMenuItem>
         <DropdownMenuItem
           className="text-red-600"
-          onClick={() => setModal("DeleteTrack")}
+          onClick={() => {
+            setActiveSlug(slug);
+            setActiveId(id);
+            setModal("DeleteTrack");
+          }}
         >
           <MdDelete /> Delete
         </DropdownMenuItem>

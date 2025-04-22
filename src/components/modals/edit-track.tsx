@@ -13,10 +13,10 @@ import { FaSpinner } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 const EditTrack = () => {
-  const { activeSlug, setModal, setActiveSlug } = useContext(ModalContext);
+  const { activeSlug, setModal, setActiveSlug, activeId, setActiveId } =
+    useContext(ModalContext);
   const router = useRouter();
 
-  const [id, setId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [artist, setArtist] = useState<string>("");
   const [album, setAlbum] = useState<string>("");
@@ -26,11 +26,20 @@ const EditTrack = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const editTrackHandler = async (body: EditTrackBody) => {
+    setIsLoading(true);
+
     try {
-      await editTrackById(id, body);
+      await editTrackById(activeId!, body);
+      setModal(null);
+      setActiveSlug(null);
+      setActiveId(null);
+      router.refresh();
+      toast.success(`Track "${title}" edited successfully!`);
     } catch (error) {
       console.error(error);
     }
+
+    setIsLoading(false);
   };
 
   const onEditTrackSubmit = async (e: FormEvent) => {
@@ -84,18 +93,12 @@ const EditTrack = () => {
       coverImage,
     };
 
-    setIsLoading(true);
     await editTrackHandler(body);
-    setIsLoading(false);
-    setModal(null);
-    router.refresh();
-    toast.success(`Track "${title}" edited successfully!`);
   };
 
   const getTrack = async () => {
     const track = await getTrackBySlug(activeSlug as string);
 
-    setId(track.id);
     setTitle(track.title);
     setArtist(track.artist);
     setAlbum(track.album);
@@ -109,12 +112,13 @@ const EditTrack = () => {
 
   return (
     <>
-      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3">
+      <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-black text-primary flex flex-col justify-center p-8 w-[30rem] z-20 rounded-lg gap-3 border border-secondary/30 ">
         <Button
           className="absolute top-4 right-4 cursor-pointer h-8 w-8 p-0"
           onClick={() => {
             setModal(null);
             setActiveSlug(null);
+            setActiveId(null);
           }}
           variant="link"
         >

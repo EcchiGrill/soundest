@@ -1,11 +1,13 @@
 "use client";
-import { TrackProps } from "./track.props";
+
+import EditTrackButton from "@/components/ui/edit-track-button";
+import { ITrackProps } from "./track.props";
 import Image from "next/image";
 import { BsDot } from "react-icons/bs";
 import { CiPlay1 } from "react-icons/ci";
-import EditTrackButton from "../edit-track-button";
 
 const Track = ({
+  id,
   title,
   album,
   artist,
@@ -13,7 +15,7 @@ const Track = ({
   genres,
   audioFile,
   slug,
-}: TrackProps) => {
+}: ITrackProps) => {
   return (
     <div className="max-w-lg p-5 flex flex-col gap-4 bg-background border border-secondary/30 rounded-lg shadow-md hover:shadow-lg transition duration-200 text-primary">
       <div className="relative group h-72 w-full rounded-lg overflow-hidden">
@@ -32,7 +34,7 @@ const Track = ({
           <h2>{title}</h2>
           <h3 className="text-secondary mt-1">{artist}</h3>
         </div>
-        <EditTrackButton slug={slug} />
+        <EditTrackButton slug={slug} id={id} />
       </div>
 
       <div>

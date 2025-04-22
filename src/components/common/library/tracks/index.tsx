@@ -1,14 +1,18 @@
 import { getTracks } from "@/api/tracks";
-import Track from "../ui/track";
+import Track from "./track";
+import { ITracksProps } from "./tracks.props";
 
-const Library = async () => {
-  const tracks = (await getTracks()).data;
+
+const Tracks = async ({ searchParams }: ITracksProps) => {
+  const tracks = (await getTracks(new URLSearchParams(searchParams).toString()))
+    .data;
 
   return (
-    <main className="p-10 grid grid-cols-4 gap-8">
+    <div className="grid grid-cols-4 gap-8 mt-10">
       {tracks.map((track, i) => (
         <Track
           key={i}
+          id={track.id}
           album={track.album}
           artist={track.artist}
           coverImage={track.coverImage}
@@ -18,8 +22,8 @@ const Library = async () => {
           slug={track.slug}
         />
       ))}
-    </main>
+    </div>
   );
 };
 
-export default Library;
+export default Tracks;
