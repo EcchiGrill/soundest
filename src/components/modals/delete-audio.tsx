@@ -3,13 +3,13 @@
 import { useContext, useState } from "react";
 import { ModalContext } from "../provider/modal-provider";
 import { Button } from "../ui/button";
-import { deleteTrackById } from "@/api/tracks";
 import { IoCloseOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
+import { deleteAudioFileById } from "@/api/tracks";
 import { toast } from "react-toastify";
 
-const DeleteTrack = () => {
+const DeleteAudio = () => {
   const { setModal, activeId, setActiveId, setActiveSlug } =
     useContext(ModalContext);
   const router = useRouter();
@@ -18,12 +18,12 @@ const DeleteTrack = () => {
   const deleteHandler = async () => {
     setIsLoading(true);
     try {
-      await deleteTrackById(activeId as string);
+      await deleteAudioFileById(activeId as string);
 
       setModal(null);
       setActiveId(null);
       setActiveSlug(null);
-      toast.success("Track deleted successfully!");
+      toast.success("Audio file deleted successfully!");
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -47,10 +47,10 @@ const DeleteTrack = () => {
         </Button>
 
         <div>
-          <h2 className="text-xl font-semibold">Delete track</h2>
+          <h2 className="text-xl font-semibold">Delete audio</h2>
           <p className="text-secondary text-sm mt-2">
-            Are you sure you want to delete this track? This action cannot be
-            undone.
+            Are you sure you want to delete audio file related to this track?
+            This action cannot be undone.
           </p>
         </div>
 
@@ -83,4 +83,4 @@ const DeleteTrack = () => {
   );
 };
 
-export default DeleteTrack;
+export default DeleteAudio;

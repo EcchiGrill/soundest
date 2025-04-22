@@ -75,12 +75,15 @@ const FilterPanel = () => {
 
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+    setIsSearching(true);
 
-    if (timeoutId) clearTimeout(timeoutId);
-    if (e.target.value) {
-      setIsSearching(true);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(undefined);
+    }
 
-      const newTimeout = setTimeout(() => {
+    const newTimeout = setTimeout(() => {
+      if (e.target.value) {
         router.push(
           `${pathname}?${createQueryString(
             "search",
@@ -88,15 +91,17 @@ const FilterPanel = () => {
             searchParams
           )}`
         );
-        setIsSearching(false);
-      }, DEBOUNCE_TIME);
+      } else {
+        router.push(
+          `${pathname}?${searchParams
+            .toString()
+            .replace(SEARCH_QUERY_REGEX, "")}`
+        );
+      }
+      setIsSearching(false);
+    }, DEBOUNCE_TIME);
 
-      setTimeoutId(newTimeout);
-    } else {
-      router.push(
-        `${pathname}?${searchParams.toString().replace(SEARCH_QUERY_REGEX, "")}`
-      );
-    }
+    setTimeoutId(newTimeout);
   };
 
   useEffect(() => {

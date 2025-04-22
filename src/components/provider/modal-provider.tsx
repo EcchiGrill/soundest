@@ -2,7 +2,12 @@
 
 import { useState, createContext, ReactNode } from "react";
 
-type ModalType = "CreateTrack" | "EditTrack" | "DeleteTrack" | null;
+type ModalType =
+  | "CreateTrack"
+  | "EditTrack"
+  | "DeleteTrack"
+  | "DeleteAudio"
+  | null;
 
 interface IModalContext {
   modal: ModalType;

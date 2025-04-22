@@ -1,17 +1,25 @@
-import Header from "@/components/common/header";
-import Library from "@/components/common/library";
+import Tracks from "@/components/common/tracks";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
 
 interface PageProps {
   searchParams: Promise<Record<string, string>>;
 }
 
 export default async function Home({ searchParams }: PageProps) {
-  const params = await searchParams;
+  const queryParams = await searchParams;
 
   return (
-    <>
-      <Header />
-      <Library searchParams={params} />
-    </>
+    <Suspense
+      fallback={
+        <main className="p-10 grid grid-cols-4 gap-8">
+          <Skeleton className="w-[30rem] h-[35rem]" />
+          <Skeleton className="w-[30rem] h-[35rem]" />
+          <Skeleton className="w-[30rem] h-[35rem]" />
+        </main>
+      }
+    >
+      <Tracks searchParams={queryParams} />
+    </Suspense>
   );
 }

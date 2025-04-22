@@ -41,3 +41,19 @@ export const deleteTrackById = async (id: string) =>
     endpoint: `/tracks/${id}`,
     method: "DELETE",
   });
+
+export const uploadAudioFileById = async (
+  id: string,
+  body: FormData
+): Promise<Track> =>
+  fetchApi({
+    endpoint: `/tracks/${id}/upload`,
+    method: "POST",
+    body,
+  });
+
+export const deleteAudioFileById = async (id: string) =>
+  fetchApi({
+    endpoint: `/tracks/${id}/file`,
+    method: "DELETE",
+  });
